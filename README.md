@@ -1,6 +1,7 @@
 # IncrementProductView
 
 [![Made in SteelKiwi](https://github.com/steelkiwi/IncrementProductView/blob/master/assets/made_in_steelkiwi.png)](http://steelkiwi.com/blog/)
+[ ![Download](https://api.bintray.com/packages/soulyaroslav/maven/increment-product-view/images/download.svg) ](https://bintray.com/soulyaroslav/maven/increment-product-view/_latestVersion)
 
 # Description
 
@@ -17,7 +18,7 @@ For project API 21+
 ## Gradle
 
 ```gradle
-soon as possible
+compile 'com.steelkiwi:increment-product-view:1.0.0'
 ```
 
 # Usage
