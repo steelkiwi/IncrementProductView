@@ -8,7 +8,7 @@ Interesting concept of products incrementation inspired this [Design](https://dr
 
 # View
 
-![Animation](https://github.com/soulyaroslav/IncrementProductView/blob/master/assets/animation.gif)
+![Animation](https://github.com/steelkiwi/IncrementProductView/blob/master/assets/animation.gif)
 
 # Download
 
