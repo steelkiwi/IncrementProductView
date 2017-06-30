@@ -2,4 +2,5 @@
 <resources>
     <dimen name="plus_icon_size">100dp</dimen>
     <dimen name="max_view_size">150dp</dimen>
+    <dimen name="text_size">24sp</dimen>
 </resources>

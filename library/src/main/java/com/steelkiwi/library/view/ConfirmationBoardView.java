@@ -88,14 +88,14 @@ public class ConfirmationBoardView extends View {
         }
     }
 
-    public void setBitmapResource(@DrawableRes int res) {
-        this.bitmap = BitmapFactory.decodeResource(getResources(), res);
+    public void setBitmapResource(Bitmap bitmap) {
+        this.bitmap = bitmap;
         invalidate();
     }
 
     @Override
-    public void setBackgroundColor(@ColorRes int backgroundColor) {
-        defaultBackgroundPaint.setColor(ContextCompat.getColor(getContext(), backgroundColor));
+    public void setBackgroundColor(int backgroundColor) {
+        defaultBackgroundPaint.setColor(backgroundColor);
         invalidate();
     }
 }

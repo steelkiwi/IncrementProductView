@@ -3,4 +3,5 @@
     <color name="shadow_color">#9a1e1e1e</color>
     <color name="default_background_color">#435E69</color>
     <color name="highlight_background_color">#4BBEC2</color>
+    <color name="counter_background_color">#2B3841</color>
 </resources>

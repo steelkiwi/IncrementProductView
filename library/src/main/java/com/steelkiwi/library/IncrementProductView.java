@@ -3,11 +3,12 @@ package com.steelkiwi.library;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.support.annotation.ColorRes;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
@@ -44,8 +45,6 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
 
     private Paint defaultBackgroundPaint;
     private Paint increaseButtonPaint;
-    // main icon bitmap
-    private Bitmap mainIconBitmap;
     // default state of the view group
     private ViewState state = ViewState.IDLE;
     // confirmation view state
@@ -60,68 +59,115 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
     private BoardItemView decrementChild;
     // start animation delay
     private long startDelay = 0;
-    //
+    // view for manage board state
     private ConfirmationBoardView confirmationBoardView;
+    // radius for confirmation board view
     private int mainViewRadius;
+    // parent center of X axis
     private int centerX;
+    // parent center of Y axis
     private int centerY;
+    // radius for parent circle
     private int defaultRadius;
+    // main icon bitmap
+    private Bitmap mainIconBitmap;
+    // icon for increment view
+    private Bitmap incrementIcon;
+    // icon for decrement view
+    private Bitmap decrementIcon;
+    // icon for confirmation view
+    private Bitmap addIcon;
+    private Bitmap confirmIcon;
+    // default background color
+    private int defaultBackgroundColor;
+    // highlight background color
+    private int highLightBackgroundColor;
+    // board view background color
+    private int boardBackgroundColor;
+    // board view text size
+    private float boardTextSize;
+    // board view text color
+    private int boardTextColor;
+
 
     public IncrementProductView(Context context) {
         super(context);
-        init();
+        init(null);
     }
 
     public IncrementProductView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(attrs);
     }
 
     public IncrementProductView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(attrs);
     }
 
-    private void init() {
-        initDefaultValues();
+    private void init(AttributeSet attrs) {
+        retrieveAttributes(attrs);
         initDefaultBackgroundPaint();
         initIncreaseButtonPaint();
         initBoardViews();
 
     }
 
-    private void initDefaultValues() {
-        // empty
-        mainIconBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.box);
+    private void retrieveAttributes(AttributeSet attributes) {
+        TypedArray typedArray = getContext().obtainStyledAttributes(attributes, R.styleable.IncrementProductView);
+        setParentMiddleIcon(typedArray.getDrawable(R.styleable.IncrementProductView_ipv_middle_icon));
+        setIncrementIcon(typedArray.getDrawable(R.styleable.IncrementProductView_ipv_increment_icon));
+        setDecrementIcon(typedArray.getDrawable(R.styleable.IncrementProductView_ipv_decrement_icon));
+        setAddIcon(typedArray.getDrawable(R.styleable.IncrementProductView_ipv_add_icon));
+        setConfirmIcon(typedArray.getDrawable(R.styleable.IncrementProductView_ipv_confirm_icon));
+        setDefaultBackgroundColor(typedArray.getColor(R.styleable.IncrementProductView_ipv_default_background_color,
+                ContextCompat.getColor(getContext(), R.color.default_background_color)));
+        setHighLightBackgroundColor(typedArray.getColor(R.styleable.IncrementProductView_ipv_highlight_background_color,
+                ContextCompat.getColor(getContext(), R.color.highlight_background_color)));
+        setBoardBackgroundColor(typedArray.getColor(R.styleable.IncrementProductView_ipv_counter_background_color,
+                ContextCompat.getColor(getContext(), R.color.counter_background_color)));
+        setBoardTextColor(typedArray.getColor(R.styleable.IncrementProductView_ipv_text_color,
+                ContextCompat.getColor(getContext(), android.R.color.white)));
+        setBoardTextSize(typedArray.getDimensionPixelSize(R.styleable.IncrementProductView_ipv_text_size,
+                getResources().getDimensionPixelSize(R.dimen.text_size)));
+        typedArray.recycle();
     }
 
     private void initBoardViews() {
         boardChild = new BoardView(getContext());
+        boardChild.setDefaultBackgroundColor(getBoardBackgroundColor(), getHighLightBackgroundColor());
+        boardChild.setTextParameters(getBoardTextSize(), getBoardTextColor());
         // init increment view
         incrementChild = new BoardItemView(getContext());
         incrementChild.setType(BoardItemType.INCREMENT_TYPE);
+        incrementChild.setDefaultBackgroundColor(getHighLightBackgroundColor());
+        incrementChild.setIncrementBitmap(getIncrementIcon());
+        incrementChild.setDecrementBitmap(getDecrementIcon());
         incrementChild.setOnClickListener(onIncrementClick);
         // init decrement view
         decrementChild = new BoardItemView(getContext());
         decrementChild.setType(BoardItemType.DECREMENT_TYPE);
+        decrementChild.setDefaultBackgroundColor(getHighLightBackgroundColor());
+        decrementChild.setIncrementBitmap(getIncrementIcon());
+        decrementChild.setDecrementBitmap(getDecrementIcon());
         decrementChild.setOnClickListener(onDecrementClick);
         // init button to confirmation
         confirmationBoardView = new ConfirmationBoardView(getContext());
-        confirmationBoardView.setBitmapResource(R.drawable.plus);
-        confirmationBoardView.setBackgroundColor(R.color.default_background_color);
+        confirmationBoardView.setBitmapResource(getAddIcon());
+        confirmationBoardView.setBackgroundColor(getDefaultBackgroundColor());
         confirmationBoardView.setOnClickListener(this);
     }
 
     private void initDefaultBackgroundPaint() {
         defaultBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        defaultBackgroundPaint.setColor(ContextCompat.getColor(getContext(), R.color.default_background_color));
+        defaultBackgroundPaint.setColor(getDefaultBackgroundColor());
         defaultBackgroundPaint.setStyle(Paint.Style.STROKE);
         defaultBackgroundPaint.setStrokeWidth(STROKE_WIDTH);
     }
 
     private void initIncreaseButtonPaint() {
         increaseButtonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        increaseButtonPaint.setColor(ContextCompat.getColor(getContext(), R.color.default_background_color));
+        increaseButtonPaint.setColor(getDefaultBackgroundColor());
         increaseButtonPaint.setStyle(Paint.Style.FILL);
     }
 
@@ -238,6 +284,12 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
             if(boardChild != null) {
                 boardChild.decrement();
                 onCountChange(boardChild.getCount());
+                // if count is 0 close board view
+                if(boardChild.getCount() == 0) {
+                    confirmationState = ConfirmationState.OPEN;
+                    manageBoardViewState(true);
+                    onClose();
+                }
             }
         }
     };
@@ -251,6 +303,12 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
     private void onConfirm() {
         if(onStateListener != null) {
             onStateListener.onConfirm(boardChild.getCount());
+        }
+    }
+
+    private void onClose() {
+        if(onStateListener != null) {
+            onStateListener.onClose();
         }
     }
 
@@ -281,7 +339,7 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
                 onCountChange(boardChild.getCount());
             }
             // change background color
-            changeBackgroundsColor(R.color.highlight_background_color);
+            changeBackgroundsColor(getHighLightBackgroundColor());
             // update views to expand state
             expandBoardViews(cx, cy, radius);
             // change parent state to have ability to close expanded views
@@ -300,11 +358,11 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
         }
     }
 
-    private void changeBackgroundsColor(@ColorRes int color) {
-        defaultBackgroundPaint.setColor(ContextCompat.getColor(getContext(), color));
-        increaseButtonPaint.setColor(ContextCompat.getColor(getContext(), color));
+    private void changeBackgroundsColor(int color) {
+        defaultBackgroundPaint.setColor(color);
+        increaseButtonPaint.setColor(color);
         confirmationBoardView.setBackgroundColor(color);
-        confirmationBoardView.setBitmapResource(R.drawable.done);
+        confirmationBoardView.setBitmapResource(getConfirmIcon());
         invalidate();
     }
 
@@ -330,9 +388,9 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
                 .addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        changeBackgroundsColor(R.color.default_background_color);
-                        confirmationBoardView.setBackgroundColor(R.color.default_background_color);
-                        confirmationBoardView.setBitmapResource(R.drawable.plus);
+                        changeBackgroundsColor(getDefaultBackgroundColor());
+                        confirmationBoardView.setBackgroundColor(getDefaultBackgroundColor());
+                        confirmationBoardView.setBitmapResource(getAddIcon());
                     }
                 });
         animateExpandView(decrementChild, cx, cy, radius,
@@ -356,8 +414,18 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        drawMainCircle(canvas);
+        drawMainIcon(canvas);
+    }
+
+    private void drawMainCircle(final Canvas canvas) {
         canvas.drawCircle(centerX, centerY, defaultRadius, defaultBackgroundPaint);
-        canvas.drawBitmap(mainIconBitmap, centerX - mainIconBitmap.getWidth() / 2, centerY - mainIconBitmap.getHeight() / 2, defaultBackgroundPaint);
+    }
+
+    private void drawMainIcon(final Canvas canvas) {
+        if(getMainIconBitmap() != null) {
+            canvas.drawBitmap(getMainIconBitmap(), centerX - getMainIconBitmap().getWidth() / 2, centerY - getMainIconBitmap().getHeight() / 2, defaultBackgroundPaint);
+        }
     }
 
     private int reconcileSize(int contentSize, int measureSpec) {
@@ -378,6 +446,19 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
         }
     }
 
+    private Bitmap convertToBitmap(Drawable drawable) {
+        if(drawable != null) {
+            int width = drawable.getIntrinsicWidth();
+            int height = drawable.getIntrinsicHeight();
+            Bitmap mutableBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(mutableBitmap);
+            drawable.setBounds(0, 0, width, height);
+            drawable.draw(canvas);
+            return mutableBitmap;
+        }
+        return null;
+    }
+
     private void incrementStartDelay() {
         startDelay += START_DELAY_PERIOD;
     }
@@ -388,5 +469,101 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
 
     public void setOnStateListener(OnStateListener onStateListener) {
         this.onStateListener = onStateListener;
+    }
+
+    public Bitmap getMainIconBitmap() {
+        return mainIconBitmap;
+    }
+
+    public void setParentMiddleIcon(Drawable drawable) {
+        mainIconBitmap = convertToBitmap(drawable);
+    }
+
+    public Bitmap getIncrementIcon() {
+        return incrementIcon;
+    }
+
+    public void setIncrementIcon(Drawable drawable) {
+        if(drawable != null) {
+            this.incrementIcon = convertToBitmap(drawable);
+        } else {
+            this.incrementIcon = BitmapFactory.decodeResource(getResources(), R.drawable.plus);
+        }
+    }
+
+    public Bitmap getDecrementIcon() {
+        return decrementIcon;
+    }
+
+    public void setDecrementIcon(Drawable drawable) {
+        if(drawable != null) {
+            this.decrementIcon = convertToBitmap(drawable);
+        } else {
+            this.decrementIcon = BitmapFactory.decodeResource(getResources(), R.drawable.minus);
+        }
+    }
+
+    public Bitmap getAddIcon() {
+        return addIcon;
+    }
+
+    public void setAddIcon(Drawable drawable) {
+        if(drawable != null) {
+            this.addIcon = convertToBitmap(drawable);
+        } else {
+            this.addIcon = BitmapFactory.decodeResource(getResources(), R.drawable.plus);
+        }
+    }
+
+    public Bitmap getConfirmIcon() {
+        return confirmIcon;
+    }
+
+    public void setConfirmIcon(Drawable drawable) {
+        if (drawable != null) {
+            this.confirmIcon = convertToBitmap(drawable);
+        } else {
+            this.confirmIcon = BitmapFactory.decodeResource(getResources(), R.drawable.done);
+        }
+    }
+
+    public int getDefaultBackgroundColor() {
+        return defaultBackgroundColor;
+    }
+
+    public void setDefaultBackgroundColor(int defaultBackgroundColor) {
+        this.defaultBackgroundColor = defaultBackgroundColor;
+    }
+
+    public int getHighLightBackgroundColor() {
+        return highLightBackgroundColor;
+    }
+
+    public void setHighLightBackgroundColor(int highLightBackgroundColor) {
+        this.highLightBackgroundColor = highLightBackgroundColor;
+    }
+
+    public int getBoardBackgroundColor() {
+        return boardBackgroundColor;
+    }
+
+    public void setBoardBackgroundColor(int boardBackgroundColor) {
+        this.boardBackgroundColor = boardBackgroundColor;
+    }
+
+    public float getBoardTextSize() {
+        return boardTextSize;
+    }
+
+    public void setBoardTextSize(float boardTextSize) {
+        this.boardTextSize = boardTextSize;
+    }
+
+    public int getBoardTextColor() {
+        return boardTextColor;
+    }
+
+    public void setBoardTextColor(int boardTextColor) {
+        this.boardTextColor = boardTextColor;
     }
 }

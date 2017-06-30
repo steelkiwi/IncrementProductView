@@ -19,7 +19,6 @@ import com.steelkiwi.library.R;
 public class BoardItemView extends View {
 
     private Paint defaultBackgroundPaint;
-    private Paint strokeBackgroundPaint;
     private BoardItemType type;
     private Bitmap incrementBitmap;
     private Bitmap decrementBitmap;
@@ -43,26 +42,11 @@ public class BoardItemView extends View {
 
     private void init() {
         initDefaultBackgroundPaint();
-        initStrokePaint();
-        initBitmaps();
     }
 
     private void initDefaultBackgroundPaint() {
         defaultBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        defaultBackgroundPaint.setColor(Color.parseColor("#4BBEC2"));
         defaultBackgroundPaint.setStyle(Paint.Style.FILL);
-    }
-
-    private void initStrokePaint() {
-        strokeBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        strokeBackgroundPaint.setColor(Color.parseColor("#4BBEC2"));
-        strokeBackgroundPaint.setStyle(Paint.Style.STROKE);
-        strokeBackgroundPaint.setStrokeWidth(3);
-    }
-
-    private void initBitmaps() {
-        incrementBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.plus);
-        decrementBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.minus);
     }
 
     @Override
@@ -104,22 +88,42 @@ public class BoardItemView extends View {
 
     private void drawBackground(final Canvas canvas, int centerX, int centerY) {
         canvas.drawCircle(centerX, centerY, centerX - 5, defaultBackgroundPaint);
-        canvas.drawCircle(centerX, centerY, centerX - 5, strokeBackgroundPaint);
     }
 
     private void drawBitmaps(final Canvas canvas, int centerX, int centerY) {
         if(type == BoardItemType.INCREMENT_TYPE) {
-            int x = centerX - incrementBitmap.getWidth() / 2;
-            int y = centerY - incrementBitmap.getHeight() / 2;
-            canvas.drawBitmap(incrementBitmap, x, y, strokeBackgroundPaint);
+            int x = centerX - getIncrementBitmap().getWidth() / 2;
+            int y = centerY - getIncrementBitmap().getHeight() / 2;
+            canvas.drawBitmap(getIncrementBitmap(), x, y, defaultBackgroundPaint);
         } else {
-            int x = centerX - decrementBitmap.getWidth() / 2;
-            int y = centerY - decrementBitmap.getHeight() / 2;
-            canvas.drawBitmap(decrementBitmap, x, y, strokeBackgroundPaint);
+            int x = centerX - getDecrementBitmap().getWidth() / 2;
+            int y = centerY - getDecrementBitmap().getHeight() / 2;
+            canvas.drawBitmap(getDecrementBitmap(), x, y, defaultBackgroundPaint);
         }
     }
 
     public void setType(BoardItemType type) {
         this.type = type;
+    }
+
+    public Bitmap getIncrementBitmap() {
+        return incrementBitmap;
+    }
+
+    public void setIncrementBitmap(Bitmap incrementBitmap) {
+        this.incrementBitmap = incrementBitmap;
+    }
+
+    public Bitmap getDecrementBitmap() {
+        return decrementBitmap;
+    }
+
+    public void setDecrementBitmap(Bitmap decrementBitmap) {
+        this.decrementBitmap = decrementBitmap;
+    }
+
+    public void setDefaultBackgroundColor(int defaultBackgroundColor) {
+        defaultBackgroundPaint.setColor(defaultBackgroundColor);
+        invalidate();
     }
 }

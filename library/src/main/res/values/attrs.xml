@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="IncrementProductView">
+        <attr name="ipv_middle_icon" format="reference"/>
+        <attr name="ipv_increment_icon" format="reference"/>
+        <attr name="ipv_decrement_icon" format="reference"/>
+        <attr name="ipv_add_icon" format="reference"/>
+        <attr name="ipv_confirm_icon" format="reference"/>
+        <attr name="ipv_default_background_color" format="color"/>
+        <attr name="ipv_highlight_background_color" format="color"/>
+        <attr name="ipv_counter_background_color" format="color"/>
+        <attr name="ipv_text_size" format="dimension"/>
+        <attr name="ipv_text_color" format="color"/>
+    </declare-styleable>
+</resources>

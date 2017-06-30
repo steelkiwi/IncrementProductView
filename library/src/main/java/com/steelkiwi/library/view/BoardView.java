@@ -39,18 +39,13 @@ public class BoardView extends View implements BoardCounter {
 
     private void initDefaultBackgroundPaint() {
         defaultBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        defaultBackgroundPaint.setColor(Color.parseColor("#2B3841"));
         defaultBackgroundPaint.setStyle(Paint.Style.FILL);
 
         strokeBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        strokeBackgroundPaint.setColor(Color.parseColor("#4BBEC2"));
         strokeBackgroundPaint.setStyle(Paint.Style.STROKE);
         strokeBackgroundPaint.setStrokeWidth(3);
 
         counterPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        counterPaint.setColor(Color.WHITE);
-        counterPaint.setTextSize(Math.round(24f * getResources().getDisplayMetrics().scaledDensity));
-
         setCount(1);
     }
 
@@ -118,7 +113,7 @@ public class BoardView extends View implements BoardCounter {
 
     @Override
     public void decrement() {
-        if(count > 1) {
+        if(count > 0) {
             count--;
         }
         invalidate();
@@ -132,5 +127,17 @@ public class BoardView extends View implements BoardCounter {
     @Override
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public void setTextParameters(float size, int color) {
+        counterPaint.setColor(color);
+        counterPaint.setTextSize(size);
+        invalidate();
+    }
+
+    public void setDefaultBackgroundColor(int color1, int color2) {
+        defaultBackgroundPaint.setColor(color1);
+        strokeBackgroundPaint.setColor(color2);
+        invalidate();
     }
 }
