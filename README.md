@@ -8,6 +8,8 @@ Interesting concept of products incrementation inspired this [Design](https://dr
 
 # View
 
+![Animation](https://github.com/soulyaroslav/IncrementProductView/blob/master/assets/animation.gif)
+
 # Download
 
 For project API 21+
