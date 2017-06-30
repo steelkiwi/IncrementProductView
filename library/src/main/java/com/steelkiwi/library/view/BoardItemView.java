@@ -28,34 +28,41 @@ public class BoardItemView extends View {
 
     public BoardItemView(Context context) {
         super(context);
-        initDefaultBackgroundPaint();
+        init();
     }
 
     public BoardItemView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initDefaultBackgroundPaint();
+        init();
     }
 
     public BoardItemView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init();
+    }
+
+    private void init() {
         initDefaultBackgroundPaint();
+        initStrokePaint();
+        initBitmaps();
     }
 
     private void initDefaultBackgroundPaint() {
         defaultBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         defaultBackgroundPaint.setColor(Color.parseColor("#4BBEC2"));
         defaultBackgroundPaint.setStyle(Paint.Style.FILL);
+    }
 
+    private void initStrokePaint() {
         strokeBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         strokeBackgroundPaint.setColor(Color.parseColor("#4BBEC2"));
         strokeBackgroundPaint.setStyle(Paint.Style.STROKE);
         strokeBackgroundPaint.setStrokeWidth(3);
+    }
 
-//        setBackgroundColor(Color.RED);
-
+    private void initBitmaps() {
         incrementBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.plus);
         decrementBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.minus);
-//        bitmap = b.copy(Bitmap.Config.ARGB_8888, true);
     }
 
     @Override
@@ -86,10 +93,21 @@ public class BoardItemView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        // calculate canvas center positions
         int centerX = width / 2;
         int centerY = height / 2;
+        // draw background
+        drawBackground(canvas, centerX, centerY);
+        // draw bitmaps
+        drawBitmaps(canvas, centerX, centerY);
+    }
+
+    private void drawBackground(final Canvas canvas, int centerX, int centerY) {
         canvas.drawCircle(centerX, centerY, centerX - 5, defaultBackgroundPaint);
         canvas.drawCircle(centerX, centerY, centerX - 5, strokeBackgroundPaint);
+    }
+
+    private void drawBitmaps(final Canvas canvas, int centerX, int centerY) {
         if(type == BoardItemType.INCREMENT_TYPE) {
             int x = centerX - incrementBitmap.getWidth() / 2;
             int y = centerY - incrementBitmap.getHeight() / 2;

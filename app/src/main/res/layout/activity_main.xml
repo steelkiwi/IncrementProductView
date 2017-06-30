@@ -11,4 +11,25 @@
        android:layout_height="200dp"
        android:background="@android:color/transparent"
        android:layout_centerInParent="true"/>
+
+   <TextView
+       android:id="@+id/productName"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_below="@id/productView"
+       android:layout_centerHorizontal="true"
+       android:layout_marginTop="15dp"
+       android:text="@string/product"
+       android:textColor="@android:color/white"
+       android:textSize="24sp"/>
+
+   <TextView
+       android:id="@+id/amount"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_below="@id/productName"
+       android:layout_centerHorizontal="true"
+       android:layout_marginTop="5dp"
+       android:textColor="@android:color/white"
+       android:textSize="22sp"/>
 </RelativeLayout>

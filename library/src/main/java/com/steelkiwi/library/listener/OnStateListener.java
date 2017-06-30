@@ -4,7 +4,7 @@ package com.steelkiwi.library.listener;
  * Created by yaroslav on 6/29/17.
  */
 
-public interface OnProductChangeListener {
+public interface OnStateListener {
     /**
      * On product count change
      * */

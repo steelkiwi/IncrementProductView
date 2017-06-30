@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="shadow_color">#9a1e1e1e</color>
+    <color name="default_background_color">#435E69</color>
+    <color name="highlight_background_color">#4BBEC2</color>
 </resources>
