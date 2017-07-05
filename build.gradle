@@ -27,6 +27,6 @@ ext {
     groupId = 'com.steelkiwi'
     uploadName = 'increment-product-view'
     description = 'Interesting concept of products incrementation'
-    publishVersion = '1.0.0'
+    publishVersion = '1.1.0'
     licences = ['Apache-2.0']
 }

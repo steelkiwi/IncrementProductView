@@ -18,7 +18,7 @@ For project API 21+
 ## Gradle
 
 ```gradle
-compile 'com.steelkiwi:increment-product-view:1.0.0'
+compile 'com.steelkiwi:increment-product-view:1.1.0'
 ```
 
 # Usage
