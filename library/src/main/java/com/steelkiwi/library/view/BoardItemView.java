@@ -24,6 +24,7 @@ public class BoardItemView extends View {
     private Bitmap decrementBitmap;
     private int width;
     private int height;
+    private int padding;
 
     public BoardItemView(Context context) {
         super(context);
@@ -41,6 +42,7 @@ public class BoardItemView extends View {
     }
 
     private void init() {
+        padding = getResources().getDimensionPixelSize(R.dimen.parent_stroke_size);
         initDefaultBackgroundPaint();
     }
 
@@ -87,7 +89,7 @@ public class BoardItemView extends View {
     }
 
     private void drawBackground(final Canvas canvas, int centerX, int centerY) {
-        canvas.drawCircle(centerX, centerY, centerX - 5, defaultBackgroundPaint);
+        canvas.drawCircle(centerX, centerY, centerX - padding, defaultBackgroundPaint);
     }
 
     private void drawBitmaps(final Canvas canvas, int centerX, int centerY) {

@@ -2,12 +2,13 @@ package com.steelkiwi.library.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
+
+import com.steelkiwi.library.R;
 
 /**
  * Created by yaroslav on 6/28/17.
@@ -21,6 +22,7 @@ public class BoardView extends View implements BoardCounter {
     private int width;
     private int height;
     private int count;
+    private int strokeWidth;
 
     public BoardView(Context context) {
         super(context);
@@ -38,12 +40,13 @@ public class BoardView extends View implements BoardCounter {
     }
 
     private void initDefaultBackgroundPaint() {
+        strokeWidth = getResources().getDimensionPixelSize(R.dimen.view_stroke_size);
         defaultBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         defaultBackgroundPaint.setStyle(Paint.Style.FILL);
 
         strokeBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         strokeBackgroundPaint.setStyle(Paint.Style.STROKE);
-        strokeBackgroundPaint.setStrokeWidth(3);
+        strokeBackgroundPaint.setStrokeWidth(strokeWidth);
 
         counterPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         setCount(1);
@@ -79,8 +82,8 @@ public class BoardView extends View implements BoardCounter {
         super.onDraw(canvas);
         int centerX = width / 2;
         int centerY = height / 2;
-        canvas.drawCircle(centerX, centerY, centerX - 3, defaultBackgroundPaint);
-        canvas.drawCircle(centerX, centerY, centerX - 3, strokeBackgroundPaint);
+        canvas.drawCircle(centerX, centerY, centerX - strokeWidth, defaultBackgroundPaint);
+        canvas.drawCircle(centerX, centerY, centerX - strokeWidth, strokeBackgroundPaint);
 
         drawText(canvas, centerX, centerY);
     }

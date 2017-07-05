@@ -1,5 +1,7 @@
 package com.steelkiwi.library;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -15,8 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.AnimatorListenerAdapter;
+import com.steelkiwi.library.animator.ArcAnimator;
+import com.steelkiwi.library.animator.Side;
 import com.steelkiwi.library.listener.OnStateListener;
 import com.steelkiwi.library.util.BoardItemType;
 import com.steelkiwi.library.util.ConfirmationState;
@@ -26,8 +28,6 @@ import com.steelkiwi.library.view.ConfirmationBoardView;
 import com.steelkiwi.library.view.BoardItemView;
 import com.steelkiwi.library.view.BoardView;
 
-import io.codetail.animation.arcanimator.ArcAnimator;
-import io.codetail.animation.arcanimator.Side;
 
 /**
  * Created by yaroslav on 6/28/17.
@@ -35,13 +35,13 @@ import io.codetail.animation.arcanimator.Side;
 
 public class IncrementProductView extends ViewGroup implements View.OnClickListener {
 
-    private static final int STROKE_WIDTH = 5;
     private static final float RADIUS_SCALE_FACTOR = .23f;
     private static final float BOARD_ITEM_SCALE = .8f;
     private static final int START_DELAY_PERIOD = 40;
     private static final int DELAY_100 = 100;
     private static final int DELAY_300 = 300;
     private static final int DELAY_500 = 600;
+    private static final float END_SCALE = 1f;
 
     private Paint defaultBackgroundPaint;
     private Paint increaseButtonPaint;
@@ -88,6 +88,8 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
     private float boardTextSize;
     // board view text color
     private int boardTextColor;
+    // stroke width
+    private int strokeWidth;
 
 
     public IncrementProductView(Context context) {
@@ -159,10 +161,11 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
     }
 
     private void initDefaultBackgroundPaint() {
+        strokeWidth = getResources().getDimensionPixelSize(R.dimen.parent_stroke_size);
         defaultBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         defaultBackgroundPaint.setColor(getDefaultBackgroundColor());
         defaultBackgroundPaint.setStyle(Paint.Style.STROKE);
-        defaultBackgroundPaint.setStrokeWidth(STROKE_WIDTH);
+        defaultBackgroundPaint.setStrokeWidth(strokeWidth);
     }
 
     private void initIncreaseButtonPaint() {
@@ -197,7 +200,7 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
         // calculate radius for main button
         mainViewRadius = (int) (centerX * RADIUS_SCALE_FACTOR);
         // default radius for main circle
-        defaultRadius = centerX - mainViewRadius - STROKE_WIDTH * 2;
+        defaultRadius = centerX - mainViewRadius - strokeWidth * 2;
         // calculate size for board view
         int viewSize = mainViewRadius * 2;
         // measure board view
@@ -314,14 +317,14 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
 
     private void scaleBoardView(final View view) {
         AnimatorSet set = new AnimatorSet();
-        ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX", .8f);
-        ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY", .8f);
+        ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX", BOARD_ITEM_SCALE);
+        ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY", BOARD_ITEM_SCALE);
         set.addListener(new android.animation.AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(android.animation.Animator animation) {
                 AnimatorSet set = new AnimatorSet();
-                ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX", 1f);
-                ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY", 1f);
+                ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX", END_SCALE);
+                ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY", END_SCALE);
                 set.playTogether(scaleXAnimator, scaleYAnimator);
                 set.setDuration(DELAY_100);
                 set.start();
@@ -401,8 +404,8 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
     private ArcAnimator animateExpandView(View view, float cx, float cy, float radius,
                                           float degree, float animationDegree, long startDelay, long delay) {
         float angle = (float) Math.toRadians(degree);
-        float stopX = (float) (cx + (radius - mainViewRadius - STROKE_WIDTH * 2) * Math.sin(angle));
-        float stopY = (float) (cy - (radius - mainViewRadius - STROKE_WIDTH * 2) * Math.cos(angle));
+        float stopX = (float) (cx + (radius - mainViewRadius - strokeWidth * 2) * Math.sin(angle));
+        float stopY = (float) (cy - (radius - mainViewRadius - strokeWidth * 2) * Math.cos(angle));
         ArcAnimator arcAnimator = ArcAnimator.createArcAnimator(view, stopX, stopY, animationDegree, Side.RIGHT);
         arcAnimator.setDuration(delay);
         arcAnimator.setStartDelay(startDelay);
@@ -424,7 +427,8 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
 
     private void drawMainIcon(final Canvas canvas) {
         if(getMainIconBitmap() != null) {
-            canvas.drawBitmap(getMainIconBitmap(), centerX - getMainIconBitmap().getWidth() / 2, centerY - getMainIconBitmap().getHeight() / 2, defaultBackgroundPaint);
+            canvas.drawBitmap(getMainIconBitmap(),
+                    centerX - getMainIconBitmap().getWidth() / 2, centerY - getMainIconBitmap().getHeight() / 2, defaultBackgroundPaint);
         }
     }
 
