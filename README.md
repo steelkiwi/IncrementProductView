@@ -13,7 +13,8 @@ Interesting concept of products incrementation inspired this [Design](https://dr
 
 # Download
 
-For project API 21+
+For project API 21+.
+For arc animation used this library components [ArcAnimator](https://github.com/asyl/ArcAnimator)
 
 ## Gradle
 
