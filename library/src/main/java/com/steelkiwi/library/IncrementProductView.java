@@ -70,7 +70,7 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
     // radius for parent circle
     private int defaultRadius;
     // main icon bitmap
-    private Bitmap mainIconBitmap;
+    private Drawable mainIconDrawable;
     // icon for increment view
     private Bitmap incrementIcon;
     // icon for decrement view
@@ -426,9 +426,10 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
     }
 
     private void drawMainIcon(final Canvas canvas) {
-        if(getMainIconBitmap() != null) {
-            canvas.drawBitmap(getMainIconBitmap(),
-                    centerX - getMainIconBitmap().getWidth() / 2, centerY - getMainIconBitmap().getHeight() / 2, defaultBackgroundPaint);
+        if(mainIconDrawable != null) {
+            Bitmap bitmap = convertToBitmap(mainIconDrawable, (int) (defaultRadius * 1.2f), (int) (defaultRadius * 1.2f));
+            canvas.drawBitmap(bitmap, centerX - bitmap.getWidth() / 2,
+                    centerY - bitmap.getHeight() / 2, defaultBackgroundPaint);
         }
     }
 
@@ -450,10 +451,8 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
         }
     }
 
-    private Bitmap convertToBitmap(Drawable drawable) {
+    private Bitmap convertToBitmap(Drawable drawable, int width, int height) {
         if(drawable != null) {
-            int width = drawable.getIntrinsicWidth();
-            int height = drawable.getIntrinsicHeight();
             Bitmap mutableBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(mutableBitmap);
             drawable.setBounds(0, 0, width, height);
@@ -461,6 +460,10 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
             return mutableBitmap;
         }
         return null;
+    }
+
+    private int calculateBitmapSize() {
+        return getWidth() / 2;
     }
 
     private void incrementStartDelay() {
@@ -475,12 +478,8 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
         this.onStateListener = onStateListener;
     }
 
-    public Bitmap getMainIconBitmap() {
-        return mainIconBitmap;
-    }
-
     public void setParentMiddleIcon(Drawable drawable) {
-        mainIconBitmap = convertToBitmap(drawable);
+        mainIconDrawable = drawable;
     }
 
     public Bitmap getIncrementIcon() {
@@ -489,7 +488,7 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
 
     public void setIncrementIcon(Drawable drawable) {
         if(drawable != null) {
-            this.incrementIcon = convertToBitmap(drawable);
+            this.incrementIcon = convertToBitmap(drawable, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         } else {
             this.incrementIcon = BitmapFactory.decodeResource(getResources(), R.drawable.plus);
         }
@@ -501,7 +500,7 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
 
     public void setDecrementIcon(Drawable drawable) {
         if(drawable != null) {
-            this.decrementIcon = convertToBitmap(drawable);
+            this.decrementIcon = convertToBitmap(drawable, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         } else {
             this.decrementIcon = BitmapFactory.decodeResource(getResources(), R.drawable.minus);
         }
@@ -513,7 +512,7 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
 
     public void setAddIcon(Drawable drawable) {
         if(drawable != null) {
-            this.addIcon = convertToBitmap(drawable);
+            this.addIcon = convertToBitmap(drawable, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         } else {
             this.addIcon = BitmapFactory.decodeResource(getResources(), R.drawable.plus);
         }
@@ -525,7 +524,7 @@ public class IncrementProductView extends ViewGroup implements View.OnClickListe
 
     public void setConfirmIcon(Drawable drawable) {
         if (drawable != null) {
-            this.confirmIcon = convertToBitmap(drawable);
+            this.confirmIcon = convertToBitmap(drawable, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         } else {
             this.confirmIcon = BitmapFactory.decodeResource(getResources(), R.drawable.done);
         }
