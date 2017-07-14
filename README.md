@@ -18,7 +18,7 @@ For arc animation used this library components [ArcAnimator](https://github.com/
 ## Gradle
 
 ```gradle
-compile 'com.steelkiwi:increment-product-view:1.1.0'
+compile 'com.steelkiwi:increment-product-view:1.2.0'
 ```
 
 # Usage
