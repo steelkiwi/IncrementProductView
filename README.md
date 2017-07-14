@@ -2,7 +2,6 @@
 
 [![Made in SteelKiwi](https://github.com/steelkiwi/IncrementProductView/blob/master/assets/made_in_steelkiwi.png)](http://steelkiwi.com/blog/)
 [ ![Download](https://api.bintray.com/packages/soulyaroslav/maven/increment-product-view/images/download.svg) ](https://bintray.com/soulyaroslav/maven/increment-product-view/_latestVersion)
-
 # Description
 
 Interesting concept of products incrementation inspired this [Design](https://dribbble.com/shots/1769468-Product-Animation)
